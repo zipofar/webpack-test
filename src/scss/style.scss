@@ -1,4 +1,10 @@
 $bg-color: darkgreen;
+
+@font-face {
+    font-family: "g";
+    src: url("../fonts/Autobus-Bold.ttf"),
+}
+
 html, body {
     height: 100%;
 }
@@ -7,9 +13,20 @@ body {
     background-color: $bg-color;
 }
 
+p {
+    font-family: 'g'
+}
+
 .home {
     width: 50px;
     height: 50px;
     background-image: url('../img/vw.jpg');
+    background-size: cover;
+}
+
+.svg {
+    width: 50px;
+    height: 50px;
+    background-image: url('../img/svg/Volkswagen_logo_2012.svg');
     background-size: cover;
 }

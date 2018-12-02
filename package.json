@@ -4,10 +4,10 @@
   "description": "",
   "main": "src/js/app.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode=development",
     "watch": "webpack --watch",
     "start": "webpack-dev-server",
-    "prod": "NODE_ENV=production webpack"
+    "production": "NODE_ENV=production webpack --mode=production"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "img-loader": "^3.0.1",
     "mini-css-extract-plugin": "^0.4.5",
     "node-sass": "^4.10.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-load-config": "^2.0.0",
     "postcss-loader": "^3.0.0",
     "postcss-plugin": "^1.0.0",

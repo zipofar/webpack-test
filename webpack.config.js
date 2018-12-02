@@ -1,10 +1,11 @@
 const path = require('path');
-//const webpack = require('webpack');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ImageminPlugin = require('imagemin-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
 
 var isProduction = (process.env.NODE_ENV === 'production');
 
@@ -23,7 +24,7 @@ module.exports = {
     },
     devtool: (isProduction) ? '' : 'inline-source-map',
     devServer: {
-        contentBase: './app',
+        //contentBase: './app',
         compress: true,
         port: 9000
     },
@@ -32,6 +33,16 @@ module.exports = {
           filename: "css/[name].css",
         }),
         new CleanWebpackPlugin(['dist']),
+        new CopyWebpackPlugin(
+            [
+                { from: './img', to: 'img' }
+            ],
+            {
+                ignore: [
+                    { glob: 'svg/*' },
+                ],
+            }
+        ),
     ],
     module: {
         rules: [
@@ -53,6 +64,7 @@ module.exports = {
                     },
                   ],
             },
+            //Images
             {
                 test: /\.(png|gif|jpg)$/,
                 loaders: [
@@ -64,7 +76,43 @@ module.exports = {
                     },
                     'img-loader',
                 ],
-            }
+            },
+            //Fonts
+            {
+                test: /\.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[path][name].[ext]',
+                        }
+                    },
+                ],
+            },
+            //SVG
+            {
+                test: /\.svg/,
+                loader: 'svg-url-loader'
+            },
         ],
     }
 };
+
+// PRODUCTION ONLY
+if (isProduction) {
+    module.exports.plugins.push(
+        new OptimizeCSSAssetsPlugin({})
+    );
+    module.exports.plugins.push(
+        new UglifyJsPlugin({
+            cache: true,
+            parallel: true,
+            sourceMap: true
+          }),
+    );
+    module.exports.plugins.push(
+        new ImageminPlugin({
+            test: /\.(png|jpg|gif|svg)$/i,
+        })
+    );
+}
